@@ -25,4 +25,7 @@ class MapViewController :UIViewController
     }
 
 
-}
+    // programmatice view test 
+    
+    
+} //end class

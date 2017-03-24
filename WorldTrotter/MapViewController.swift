@@ -24,7 +24,7 @@ class MapViewController :UIViewController
         // Set it as the view of this view controller
         view = mapView
         
-        
+      
         
         // Programmatic constraints
         // A segmented control allows the user to choose between a discrete set of options
@@ -34,6 +34,9 @@ class MapViewController :UIViewController
         let segmentedControl = UISegmentedControl(items:["Standard", "Hybrid", "Satellite"])
         segmentedControl.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         segmentedControl.selectedSegmentIndex = 0
+        
+        segmentedControl.addTarget(self, action: #selector(MapViewController.mapTypeChanged(_:)), for: .valueChanged)
+        
         
         
         // AutoresizingMasks = translating constraints with an older system for scaling interfaces called autoresizing masks
@@ -45,31 +48,85 @@ class MapViewController :UIViewController
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(segmentedControl)
     
-        
-        // When you work with Auto Layout programmatically, you will use anchors to create your constraints
-        // Anchors are properties on the view that correspond to attributes that you might want to constrain to an anchor on another view.
         /**
-        For example, you might want to constrain the leading anchor of one view to the leading anchor of another view. 
-        This would have the effect of two view's leading edges being alignned
+         What is an anchor?
+         Fact:  When you work with Auto Layout programmatically, you will use anchors to create your constraints
+         Anchors are properties on the view that correspond to attributes that you might want to constrain to an anchor on another view.
+         For example, you might want to constrain the leading anchor of one view to the leading anchor of another view.
+         This would have the effect of two view's leading edges being aligned
+         
+         I think an anchor is giving a variable name to a constraint
         **/
         
         
-        // The top anchor of the segmented control should be equal to the top anchor of its superview
-        let topConstraint = segmentedControl.topAnchor.constraint(equalTo: view.topAnchor)
+        /**
+         The top anchor of the segmented control should be equal to the top anchor of its superview
+         //let topConstraint = segmentedControl.topAnchor.constraint(equalTo: view.topAnchor)
+         Problem : This does not look good becuase the segmented control is underlapping the status bar
+         Solution: make the segmented control to be 8 points below the top layout guide
+         Fact    : By using layout guides instead of hardcoded constant, the views will adapt based on the context they appear in.
+         
+         What is a layout guide?
+         Indicate the extent to which the view controller's view contents will be visible. 
+         
+         What is the topLayoutGuide?
+         Allows your content to not underlap the status bar or navigation bar at the top of the screen
+         
+         What is the bottomLayouGuide?
+         Allows your content to not underlap thhe tab bar at the bottom of the screen 
+         
+         Fact : There are 3 types of layout guid anchors ( topAnchor, bottomAnchor, heightAnchor) 
+         
+         What does bottomAnchor mean? 
+         because you want the segmented control to be under the status bar, you will constrain the bottom anchor of the top layout guide
+         
+         
+        **/
+        let topConstraint = segmentedControl.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 8)
         
         
         // The leading anchor of the segmented control should be equal to the leading anchor of its superview
-        let leadingConstraint = segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        // What does .equalTo mean?
+        // Create a constraint between the two anchors
         
         
-        // The trailing anchor of the segmented control should be equal toe the trailing anchor of its superview	
-        let trailingConstraint = segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        // Problem with this code: the bar on top touches the side margins
+        // let leadingConstraint = segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+         // The trailing anchor of the segmented control should be equal to the trailing anchor of its superview
+        // let trailingConstraint = segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        // Solution: use margins
+        
+        
+        // What is a margin? 
+        
+        
+        let margins = view.layoutMarginsGuide
+        let leadingConstraint = segmentedControl.leadingAnchor.constraint(equalTo: margins.leadingAnchor)
+        let trailingConstraint = segmentedControl.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
+        
+        topConstraint.isActive = true
+        leadingConstraint.isActive = true
+        trailingConstraint.isActive = true
+        
     
     
     
     } // end loadView()
     
-    
+    // This method will check which segment was selected and update the map accordingly
+    func mapTypeChanged(_ segControl: UISegmentedControl) {
+        switch segControl.selectedSegmentIndex{
+        case 0:
+            mapView.mapType = .standard
+        case 1:
+            mapView.mapType = .hybrid
+        case 2:
+            mapView.mapType = .satellite
+        default:
+            break
+        }
+    }
+
     
     
     

@@ -104,6 +104,25 @@
             </objects>
             <point key="canvasLocation" x="1840.8" y="-1.3493253373313345"/>
         </scene>
+        <!--BigNerdRanch-->
+        <scene sceneID="cj6-my-vtL">
+            <objects>
+                <viewController id="7mW-Yy-GXT" customClass="WebViewController" customModule="WorldTrotter" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="SB2-MA-fn5"/>
+                        <viewControllerLayoutGuide type="bottom" id="DOo-CD-zez"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Qmc-r3-soA">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="BigNerdRanch" id="Rpb-Kd-Re0"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VJX-aB-cfW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="951" y="812"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="xAY-fk-8yf">
             <objects>
@@ -117,6 +136,7 @@
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="ffO-6y-CSY"/>
                         <segue destination="XG4-Li-oC8" kind="relationship" relationship="viewControllers" id="DKI-WK-9OM"/>
+                        <segue destination="7mW-Yy-GXT" kind="relationship" relationship="viewControllers" id="A77-au-NcT"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z2B-dK-FW9" userLabel="First Responder" sceneMemberID="firstResponder"/>

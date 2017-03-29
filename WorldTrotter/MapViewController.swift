@@ -8,23 +8,22 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
-class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate
-//class MapViewController :UIViewController
-{
-
-    // Variable
-    var mapView : MKMapView!
+class MapViewController: UIViewController, CLLocationManagerDelegate {
     
+
+    var mapView : MKMapView!
+    var locationManager: CLLocationManager!
     
     // If a view controller is asked for its view and its view is nil, then the loadView() method is called
     override func loadView() {
         
         // Silver Challenge
-        mapView.delegate = self
+
         
         locationManager = CLLocationManager()
-        
+        locationManager.delegate = self
         
         // Create a map view
         mapView = MKMapView()
@@ -32,17 +31,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         // Set it as the view of this view controller
         view = mapView
         
-      
+        
         
         // Programmatic constraints
         // A segmented control allows the user to choose between a discrete set of options
         // and you will use of to allow the user to switch between map types: standard, hybrid, and satellite
         
-        
         let segmentedControl = UISegmentedControl(items:["Standard", "Hybrid", "Satellite"])
         segmentedControl.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         segmentedControl.selectedSegmentIndex = 0
-        
         segmentedControl.addTarget(self, action: #selector(MapViewController.mapTypeChanged(_:)), for: .valueChanged)
         
         
@@ -55,7 +52,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         // The fix is to turn off this default translation by setting the property translateAutoresizingMaskIntoContraints to false.
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(segmentedControl)
-    
+        
         /**
          What is an anchor?
          Fact:  When you work with Auto Layout programmatically, you will use anchors to create your constraints
@@ -64,7 +61,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
          This would have the effect of two view's leading edges being aligned
          
          I think an anchor is giving a variable name to a constraint
-        **/
+         **/
         
         
         /**
@@ -75,37 +72,32 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
          Fact    : By using layout guides instead of hardcoded constant, the views will adapt based on the context they appear in.
          
          What is a layout guide?
-         Indicate the extent to which the view controller's view contents will be visible. 
+         Indicate the extent to which the view controller's view contents will be visible.
          
          What is the topLayoutGuide?
          Allows your content to not underlap the status bar or navigation bar at the top of the screen
          
          What is the bottomLayouGuide?
-         Allows your content to not underlap thhe tab bar at the bottom of the screen 
+         Allows your content to not underlap thhe tab bar at the bottom of the screen
          
-         Fact : There are 3 types of layout guid anchors ( topAnchor, bottomAnchor, heightAnchor) 
+         Fact : There are 3 types of layout guid anchors ( topAnchor, bottomAnchor, heightAnchor)
          
-         What does bottomAnchor mean? 
+         What does bottomAnchor mean?
          because you want the segmented control to be under the status bar, you will constrain the bottom anchor of the top layout guide
-         
-         
-        **/
+         **/
         let topConstraint = segmentedControl.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 8)
         
         
         // The leading anchor of the segmented control should be equal to the leading anchor of its superview
         // What does .equalTo mean?
         // Create a constraint between the two anchors
-        
+    
         
         // Problem with this code: the bar on top touches the side margins
         // let leadingConstraint = segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-         // The trailing anchor of the segmented control should be equal to the trailing anchor of its superview
+        // The trailing anchor of the segmented control should be equal to the trailing anchor of its superview
         // let trailingConstraint = segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         // Solution: use margins
-        
-        
-        // What is a margin? 
         
         
         let margins = view.layoutMarginsGuide
@@ -116,9 +108,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         leadingConstraint.isActive = true
         trailingConstraint.isActive = true
         
-    
-    
-    
+        
     } // end loadView()
     
     // This method will check which segment was selected and update the map accordingly
@@ -134,8 +124,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             break
         }
     }
-
-    
     
     
     // viewDidLoad gets called after the view controller's interface file is loaded
@@ -143,21 +131,18 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewDidLoad() {
         super.viewDidLoad()
         print("MapViewController loaded its view.")
-        
     }
     
     // viewWillAppear gets called each time the view controller's view appears onscreen
     override func viewWillAppear(_ animated: Bool) {
         print("viewWillApear MapViewController loaded its view.")
     }
-
-
     
     /**
      Silver challenge
      
-     What does this method do? 
-    **/
+     What does this method do?
+     **/
     func initLocalizationButton(_ anyView: UIView!){
         let localizationButton = UIButton.init(type: .system)
         localizationButton.setTitle("Localization", for: .normal)
@@ -165,9 +150,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         view.addSubview(localizationButton)
         
         //Constraints
-        
-        let topConstraint = localizationButton.topAnchor.constraint(equalTo:anyView
-            .topAnchor, constant: 32 )
+         let topConstraint = localizationButton.topAnchor.constraint(equalTo:anyView.topAnchor, constant: 32 )
         let leadingConstraint = localizationButton.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor)
         let trailingConstraint = localizationButton.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor)
         
@@ -183,7 +166,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     // ?
     func showLocalization(sender: UIButton!){
-        locationManager.requestWhenInUseAuthorization()//se agrega permiso en info.plist
+        locationManager.requestWhenInUseAuthorization()
         mapView.showsUserLocation = true //fire up the method mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation)
         
         
@@ -194,10 +177,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         //This is a method from MKMapViewDelegate, fires up when the user`s location changes
         let zoomedInCurrentLocation = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 500, 500)
         mapView.setRegion(zoomedInCurrentLocation, animated: true)
-        
-        
-        //mapView.userTrackingMode = .follow
-        
     }
     
     
